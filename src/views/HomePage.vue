@@ -1,12 +1,17 @@
 <template>
   <div>
-    Hello world
+    <ThreeCanvasVue></ThreeCanvasVue>
   </div>
 </template>
 
 <script>
-export default {
 
+import ThreeCanvasVue from '@/components/ThreeCanvas.vue';
+
+export default {
+ components:{
+  ThreeCanvasVue,
+ },
 }
 </script>
 
