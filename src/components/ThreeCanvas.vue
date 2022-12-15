@@ -1,5 +1,5 @@
 <template>
-    <canvas> {{ render() }}</canvas>
+    <canvas class="threejs"> {{ render() }}</canvas>
 </template>
 
 <script>
@@ -38,3 +38,9 @@
     }
 
 </script>
+
+<style scoped>
+    .threejs{
+        width: 50%;
+    }
+</style>
