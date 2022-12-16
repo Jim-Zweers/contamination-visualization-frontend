@@ -11,6 +11,12 @@
   color: #2c3e50;
 }
 
+html, body{
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
 nav {
   padding: 30px;
 }
@@ -22,5 +28,9 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
+}
+
+body{
+  background-color: #E9EBF8;
 }
 </style>
