@@ -3,11 +3,11 @@
     <div class="navbar">
       <NavBarVue></NavBarVue>
     </div> 
-    <div class="model"> hallo
+    <div class="model">
       <ThreeCanvasVue></ThreeCanvasVue>
     </div>
     <div class="data">
-      hallo
+      <!-- <TableWidgetVue></TableWidgetVue> -->
     </div>
   </div>  
 </template>
@@ -16,11 +16,13 @@
 
 import ThreeCanvasVue from '@/components/ThreeCanvas.vue';
 import NavBarVue from '@/components/NavBar.vue';
+// import TableWidgetVue from '@/components/TableWidget.vue';
 
 export default {
  components:{
   ThreeCanvasVue,
   NavBarVue,
+  // TableWidgetVue,
  },
 }
 </script>
@@ -42,11 +44,12 @@ export default {
   background-color: white;
   grid-row: 1 / span 2;
   display: flex;
-  margin: 30px;
+  margin: 25px;
 }
 
 .model{
   background-color: white;
+  padding: 10px;
   margin: 30px;
 }
 

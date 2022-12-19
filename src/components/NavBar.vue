@@ -14,11 +14,6 @@
     }
 </script>
 <style scoped>
-    nav{
-       display:flex;
-       flex-direction: column;
-       position: absolute;
-    }
 
     router-link:hover{
         background-color: #0fE022;

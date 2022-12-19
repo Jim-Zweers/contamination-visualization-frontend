@@ -9,12 +9,14 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
+    "dotenv": "^16.0.3",
     "feather-icons": "^4.29.0",
     "three": "^0.146.0",
     "vue": "^3.2.45",
     "vue-feather": "^2.0.0",
     "vue-feather-icons": "^5.1.0",
     "vue-router": "^4.0.3",
+    "vue3-easy-data-table": "^1.5.23",
     "vuex": "^4.0.0"
   },
   "devDependencies": {
