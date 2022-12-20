@@ -7,7 +7,7 @@
       <ThreeCanvasVue></ThreeCanvasVue>
     </div>
     <div class="data">
-      <!-- <TableWidgetVue></TableWidgetVue> -->
+      <TableWidgetVue></TableWidgetVue>
     </div>
   </div>  
 </template>
@@ -16,13 +16,13 @@
 
 import ThreeCanvasVue from '@/components/ThreeCanvas.vue';
 import NavBarVue from '@/components/NavBar.vue';
-// import TableWidgetVue from '@/components/TableWidget.vue';
+import TableWidgetVue from '@/components/TableWidget.vue';
 
 export default {
  components:{
   ThreeCanvasVue,
   NavBarVue,
-  // TableWidgetVue,
+  TableWidgetVue,
  },
 }
 </script>
