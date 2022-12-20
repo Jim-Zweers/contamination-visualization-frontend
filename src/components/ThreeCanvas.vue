@@ -9,7 +9,7 @@
     import * as THREE from 'three';
     import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
     import { onMounted, ref } from '@vue/runtime-core';
-    // import OrbitControls from 'three/examples/jsm/controls/OrbitControls';
+    import { OrbitControls }  from 'three/examples/jsm/controls/OrbitControls';
     
     export default {
 
@@ -23,17 +23,23 @@
                 renderer.setSize( modelRender.value.clientWidth, modelRender.value.clientHeight);    
 
                 const scene = new THREE.Scene();
-                const light = new THREE.AmbientLight(0x404040);
+                const light = new THREE.AmbientLight(0x404040, 3);
                 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000);
                 const loader = new GLTFLoader();
+                const controls = new OrbitControls(camera, renderer.domElement);
                 let root;
+                
+                camera.position.set(-2,1,0);
+                controls.update();
 
                 loader.load(MODEL, (gltf) =>{root = gltf.scene; scene.add(root)});
-                function animate(){
-                requestAnimationFrame( animate );
-                renderer.render( scene, camera );
-                renderer.setClearColor( 0xffffff );
-
+                
+                function animate() {
+                    requestAnimationFrame( animate );
+                    controls.update();
+                    renderer.render( scene, camera );
+                    renderer.setClearColor( 0xffffff );
+                    
                 }
 
                 scene.add(light);
