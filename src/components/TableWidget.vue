@@ -1,20 +1,19 @@
 <template lang="">
-    <table>
+    <table class="header-table">
         <tr class="header-row">
             <th v-for="header in headers" :key="header.dataKey">
                 {{ header.text }}
             </th>
         </tr>
-        <tr class="item-row" v-for="item in items" :key="item.dataKey" for="osm">
-            <td><input type="checkbox" name="osm"></td>
-            <td>{{item.locationName}}</td>
-            <td>{{item.swabName}}</td>
-            <td>{{item.contamination}}</td>
-            <td>{{item.found}}</td>
-            <td>{{item.swabDate}}</td>
-            <td>{{item.analysedDate}}</td>
-        </tr>
-
+            <tr class="item-row" v-for="item in items" :key="item.dataKey" for="osm">
+                <td><input type="checkbox" name="osm"></td>
+                <td>{{item.locationName}}</td>
+                <td>{{item.swabName}}</td>
+                <td>{{item.contamination}}</td>
+                <td>{{item.found}}</td>
+                <td>{{item.swabDate}}</td>
+                <td>{{item.analysedDate}}</td>
+            </tr>
     </table>
 
 </template>
@@ -45,6 +44,14 @@
             { selected: "", locationName: "Ruimtenummer 4, punt 25", swabName: '006', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
             { selected: "", locationName: "Ruimtenummer 4, punt 26", swabName: '007', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
             { selected: "", locationName: "Ruimtenummer 4, punt 27", swabName: '008', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
+            { selected: "", locationName: "Ruimtenummer 4, punt 27", swabName: '009', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
+            { selected: "", locationName: "Ruimtenummer 4, punt 27", swabName: '009', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
+            { selected: "", locationName: "Ruimtenummer 4, punt 27", swabName: '009', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
+            { selected: "", locationName: "Ruimtenummer 4, punt 27", swabName: '009', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
+            { selected: "", locationName: "Ruimtenummer 4, punt 27", swabName: '009', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
+
+
+
         ])
 
         console.log(headers.value.text);
@@ -59,8 +66,30 @@
 </script>
 <style scoped>
 
-    table{
+    .header-table{
         width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px 10px 0px 0px;
+        overflow: hidden;
+    }
+
+    .item-container{
+        height: 260px;
+        overflow: auto;
+    }
+
+    .item-table{
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .item-table, .header-table{
+        display: block;
+    }
+
+    .data-table{
+        width: 100%;
+        overflow: auto;
     }
 
     .header-row{
@@ -77,6 +106,7 @@
         padding: 10px;
         border-bottom: .5px solid rgba(0, 0, 0, .1);
     }
+
 
     .item-row:hover{
         background-color: rgba(120, 188, 97, 0.3);

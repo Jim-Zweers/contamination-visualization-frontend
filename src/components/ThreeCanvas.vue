@@ -24,7 +24,7 @@
 
                 const scene = new THREE.Scene();
                 const light = new THREE.AmbientLight(0x404040, 3);
-                const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const camera = new THREE.PerspectiveCamera( 75, modelRender.value.clientWidth / modelRender.value.clientHeight, 0.1, 1000);
                 const loader = new GLTFLoader();
                 const controls = new OrbitControls(camera, renderer.domElement);
                 let root;
