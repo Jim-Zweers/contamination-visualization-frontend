@@ -108,6 +108,7 @@
         border-bottom: .5px solid rgba(0, 0, 0, .1);
     }
 
+
     .item-row:hover{
         background-color: rgba(120, 188, 97, 0.3);
     }
