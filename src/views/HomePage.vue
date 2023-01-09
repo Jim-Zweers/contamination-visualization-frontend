@@ -43,7 +43,6 @@ export default {
 .navbar{
   background-color: white;
   grid-row: 1 / span 2;
-  display: flex;
   margin: 25px;
 }
 
