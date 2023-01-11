@@ -97,7 +97,6 @@
     }
 
     .table-scroll{
-        height: 300px;
         overflow:auto;
         margin-top: 20px;
     }

@@ -63,6 +63,4 @@ export default {
   border-radius: 8px;
 }
 
-
-
 </style>
