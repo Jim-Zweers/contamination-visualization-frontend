@@ -69,13 +69,14 @@
                 }
 
 
+
                 const renderer = new THREE.WebGLRenderer();
                 console.log(modelRender.value);
                 modelRender.value.appendChild( renderer.domElement);
                 renderer.setSize( modelRender.value.clientWidth, modelRender.value.clientHeight);    
 
                 const scene = new THREE.Scene();
-                const light = new THREE.AmbientLight(0x404040, 2);
+                // const light = new THREE.AmbientLight(0x404040, 2);
                 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000);
                 const loader = new GLTFLoader();
                 const controls = new OrbitControls(camera, renderer.domElement);
@@ -83,6 +84,11 @@
                 
                 camera.position.set(-2,1,0);
                 controls.update();
+                const light1 = new THREE.PointLight( 0x78BC61, 1.5, 100 );
+                // const light2 = new THREE.PointLight( 0xffffff, 1.5, 100 );
+                light1.position.set( 5, 10, 0 );
+                // light2.position.set( -10, 10, 0 );
+
 
                 loader.load(MODEL, (gltf) =>{root = gltf.scene; scene.add(root)});
                 
@@ -93,8 +99,13 @@
                     renderer.setClearColor( 0xffffff );
                     
                 }
+                
+                const sphereSize = 1;
+                const pointLightHelper1 = new THREE.PointLightHelper(light1, sphereSize);
+                // const pointLightHelper2 = new THREE.PointLightHelper(light2, sphereSize);
+                scene.add( pointLightHelper1);
 
-                scene.add(light);
+                scene.add(light1);
                 animate();
                 camera.position.z = 5;
 

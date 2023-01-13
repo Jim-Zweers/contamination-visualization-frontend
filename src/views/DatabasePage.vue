@@ -34,6 +34,10 @@ export default {
     }
 
     .data{
-        
+        height: 100%;
+    }
+
+    .table-wrapper{
+        height: 100%;
     }
 </style>
