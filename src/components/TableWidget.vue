@@ -10,14 +10,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="item-row" v-for="item in items" :key="item.dataKey" for="osm">
+                    <tr class="item-row" v-for="item in state.items" :key="item.dataKey" for="osm">
                         <td><input type="checkbox" name="osm"></td>
-                        <td>{{item.locationName}}</td>
-                        <td>{{item.swabName}}</td>
-                        <td>{{item.contamination}}</td>
-                        <td>{{item.found}}</td>
-                        <td>{{item.swabDate}}</td>
-                        <td>{{item.analysedDate}}</td>
+                        <td>{{item.LocationName}}</td>
+                        <td>{{item.SwabName}}</td>
+                        <td>{{item.Contamination}}</td>
+                        <td>{{item.Found}}</td>
+                        <td>{{item.MonsterDate}}</td>
+                        <td>{{item.AnalysedDate}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -26,7 +26,7 @@
 </template>
 <script>
 
-    import { ref } from 'vue';
+    import { ref, reactive } from 'vue';
     import axios from 'axios';
 
  export default{
@@ -35,23 +35,21 @@
 
         const ALL = "http://159.223.225.249:3000/api/contamination/all";
 
-        let contaminations;
 
-        let items;
+        const state = reactive({
+            items: [],
+        });
 
-        axios.get(ALL).then((response ) => {
-            contaminations = response.data;
-            console.log(contaminations.data.length);
-            for(let i = 0; i < contaminations.data.length; i++){
-                console.log(contaminations.data[i].LocationName);
+        const getAllContaminations = () => {
+            axios.get(ALL).then((response ) => {
+                state.items = response.data.data;
+            });
+        }
 
-                items = ref([
-                    {selected: "", locationName: `${contaminations.data[i].LocationName}`}
-                ])
-            }
-        })
+        getAllContaminations();
 
-        
+
+
         const headers = ref([
             { text: "Selected" , value: "selected"},
             { text: "Location Name", value: "locationName"},
@@ -62,25 +60,18 @@
             { text: "Analysed Date", value: "analysedDate" },
         ])
 
-        // const items = ref([
-        //     { selected: "", locationName: "Ruimtenummer 3, punt 20", swabName: '001', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
-        //     { selected: "", locationName: "Ruimtenummer 3, punt 21", swabName: '002', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
-        //     { selected: "", locationName: "Ruimtenummer 3, punt 22", swabName: '003', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
-        //     { selected: "", locationName: "Ruimtenummer 3, punt 23", swabName: '004', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
-        //     { selected: "", locationName: "Ruimtenummer 3, punt 24", swabName: '005', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
-        //     { selected: "", locationName: "Ruimtenummer 4, punt 25", swabName: '006', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
-        //     { selected: "", locationName: "Ruimtenummer 4, punt 26", swabName: '007', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
-        //     { selected: "", locationName: "Ruimtenummer 4, punt 27", swabName: '008', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
-        //     { selected: "", locationName: "Ruimtenummer 4, punt 27", swabName: '008', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
-        //     { selected: "", locationName: "Ruimtenummer 4, punt 27", swabName: '008', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
-        //     { selected: "", locationName: "Ruimtenummer 4, punt 27", swabName: '008', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
 
+
+        // const items = ref([
+        //     { selected: "", locationName: "Bananenki", swabName: '001', contamination: 'Listeria', found: 'yes', swabDate: '9/12/22', analysedDate: '12/12/22'},
         // ])
+
+        console.log(state);
 
 
         return{
             headers,
-            items,
+            state,
         }
 
     }
@@ -105,6 +96,7 @@
     td{
         padding: 10px;
         border-bottom: .5px solid rgba(0, 0, 0, .1);
+
     }
 
 
