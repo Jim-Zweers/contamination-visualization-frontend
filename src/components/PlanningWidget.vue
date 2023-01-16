@@ -6,6 +6,15 @@
             <span class="selection">Cleaning</span>
             <span class="selection">Swabbing</span>
         </label>
+
+        <section class="plan__grid">
+            <div class="plan__grid__card">
+                <div>
+                    <vue-feather type="plus-circle" size="40px"></vue-feather>
+                    <h3>Create Planning</h3>
+                </div>
+            </div>
+        </section>
     </div>
 </template>
 <script>
@@ -17,6 +26,39 @@ export default {
     .plan{
         background-color: #fff;
         margin: 20px;
+    }
+
+    .plan__grid{
+        margin: 20px;
+        display: grid; 
+        grid-template-columns: 1fr 1fr 1fr 1fr; 
+        grid-template-rows: 1fr 1fr 1fr 1fr; 
+        gap: 0px 0px;
+        height: 100%;
+        width: 100%;
+        grid-template-areas: 
+            ". . . ."
+            ". . . ."
+            ". . . ."
+            ". . . ."; 
+
+    }
+
+    .plan__grid__card{
+        color: #fff;
+        position: relative;
+        width: 300px;
+        height: 200px;
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+        border-radius: 5px;
+        background-color: #78BC61;
+    }
+
+    .plan__grid__card > div{
+        position: absolute;
+        right: 50%;
+        top: 50%;
+        transform: translate(50%, -50%);
     }
 
     .switch input{

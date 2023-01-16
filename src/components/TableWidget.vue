@@ -120,6 +120,6 @@
     }
 
     .table-scroll{
-        height: 300px;
+        height: 250px;
     }
 </style>
