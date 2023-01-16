@@ -14,7 +14,7 @@
                 <table class="body-table">
                     <tbody>
                         <tr class="item-row" v-for="item in state.items" :key="item.dataKey" for="osm">
-                            <td><input ref="check" id="check" type="checkbox" name="osm" value="{{item.id}}"></td>
+                            <td><input ref="input" type="checkbox" name="osm" value="{{item.id}}"></td>
                             <td>{{item.LocationName}}</td>
                             <td>{{item.SwabName}}</td>
                             <td>{{item.Contamination}}</td>
@@ -29,31 +29,36 @@
 </template>
 <script>
 
-    import { ref, reactive, onMounted } from 'vue';
+    import { ref, reactive, onMounted} from 'vue';
     import axios from 'axios';
+    import { useContaminationStore } from '@/pinia/ContaminationStore.js';
 
  export default{
 
-    
-
     setup(){
-
+        const input = ref([]);
+        const ContaminationStore = useContaminationStore();
         const ALL = "http://159.223.225.249:3000/api/contamination/all";
-        const check = ref(null);
+        
         const state = reactive({
             items: [],
+            inputs: [],
         });
 
         const getAllContaminations = () => {
             axios.get(ALL).then((response ) => {
                 state.items = response.data.data;
+                ContaminationStore.update(state.items.ID);
+                
             });
         }
 
         onMounted(() => {
-            check;
-            // console.log(check);
-        }),
+            
+            state.inputs = input.value;
+            console.log(state.inputs);
+           
+        })
 
         getAllContaminations();
 
@@ -72,6 +77,7 @@
         return{
             headers,
             state,
+            input,
         }
 
     }

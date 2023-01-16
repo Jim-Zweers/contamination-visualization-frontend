@@ -37,7 +37,6 @@
 <script>
     import * as THREE from 'three';
     import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-    // import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
     import { onMounted, ref } from '@vue/runtime-core';
     import { OrbitControls }  from 'three/examples/jsm/controls/OrbitControls';
     import axios from 'axios';
@@ -68,16 +67,15 @@
                 }
 
                 const renderer = new THREE.WebGLRenderer();
-                // console.log(modelRender.value);
                 modelRender.value.appendChild( renderer.domElement);
-                renderer.setSize( modelRender.value.clientWidth, modelRender.value.clientHeight);    
+                renderer.setSize( modelRender.value.clientWidth, modelRender.value.clientHeight);
+                // renderer.setSize( window.innerWidth, window.innerHeight);    
 
                 const scene = new THREE.Scene();
-                // const light = new THREE.AmbientLight(0x404040, 2);
-                const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const camera = new THREE.PerspectiveCamera( 75, modelRender.value.clientWidth / modelRender.value.clientHeight, 0.1, 1000);
                 const loader = new GLTFLoader();
                 const raycaster = new THREE.Raycaster();
-                const pointer = new THREE.Vector3();
+                
                 const controls = new OrbitControls(camera, renderer.domElement);
                 let root;
                 renderer.setAnimationLoop(animate);
@@ -85,6 +83,7 @@
                 controls.update();
                 const light1 = new THREE.PointLight( 0xffffff, 1.5, 100 );
                 light1.position.set( 5, 10, 0 );
+                
 
                 loader.load(MODEL, (gltf) =>{root = gltf.scene; scene.add(root)});
 
@@ -97,14 +96,19 @@
                     });
                 }
 
+
+
                 getAllContaminations();
+
+                const pointer = new THREE.Vector3();
 
                 
                 const placeSpheres = (x,y,z) => {
-                    const geometry = new THREE.SphereGeometry(1,1,1);
+                    const geometry = new THREE.SphereGeometry(.2,.2,.2);
                     const material = new THREE.MeshBasicMaterial({color: 0xffff00});
                     const sphere = new THREE.Mesh( geometry, material);
                     sphere.position.set(x, y, z);
+                    sphere.name = "point";
                     scene.add(sphere);
                 }
                 
@@ -113,7 +117,6 @@
                     controls.update();
                     renderer.render( scene, camera );
                     renderer.setClearColor( 0xffffff );
-                    
                 }
                 
                 const sphereSize = 1;
@@ -123,33 +126,36 @@
 
 
                 function onPointerMove( event ) {
-                    pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-                    pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-                    pointer.z = 0;
-                    pointer.unproject(camera);
-                    console.log(pointer);
+                    pointer.x = ( event.clientX / modelRender.value.clientWidth ) * 2 - 1;
+                    pointer.y = - ( event.clientY / modelRender.value.clientHeight ) * 2 + 1;
 
-                    // placeSpheres(pointer.x,pointer.y,pointer.z);
                     raycaster.setFromCamera(pointer, camera);
 
-                    const intersects = raycaster.intersectObjects( scene.children );
-                    for (let i = 0; i < intersects.length; i++ ) {
-                        intersects[i].object.material.color.set(0xff0000);
-                        console.log(intersects[i]);
-                    }
+                    for(let i = 0; i < scene.children.length; i++){
+                    // console.log(scene.children[i]);
 
-                    console.log(intersects);
+                    scene.children[i].name = "point"
+                }
 
+                    // console.log(scene.children);
+                    // const intersects = raycaster.intersectObjects( scene.children);
+                    // console.log(intersects);
+                    // for (let i = 0; i < intersects.length; i++ ) {
+                    //     intersects[i].object.material.color.set(0xff0000);
+                    //     // console.log(intersects[i]);
+                    // }
+ 
                 }
 
                 scene.add(light1);
 
-                animate();
-                console.log(window);
-                window.addEventListener( 'click', onPointerMove );
+                // console.log(window);
+                modelRender.value.addEventListener( 'click', onPointerMove );
+                
 
                 camera.position.z = 5;
-
+                window.requestAnimationFrame(animate);
+                
                 
                 } );
 
