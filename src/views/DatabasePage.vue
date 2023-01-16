@@ -25,19 +25,19 @@ export default {
 </script>
 <style scoped>
     .container{
-        display: grid; 
-        grid-template-rows: 1fr 6fr; 
+        display: grid;
+        width: 100%;
+        height: 100vh;
+        grid-template-rows: 1fr;
+        grid-template-columns: 1fr 12fr;
         gap: 0px 0px; 
         grid-template-areas: 
     ". ."
     ". ."; 
     }
 
-    .data{
-        height: 100%;
+    .table-scroll{
+        height: 400px;
     }
 
-    .table-wrapper{
-        height: 100%;
-    }
 </style>

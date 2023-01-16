@@ -27,7 +27,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
  .container {
   height: 100vh;
   width: 100%;
@@ -38,32 +38,6 @@ export default {
   grid-template-areas: 
     ". ."
     ". ."; 
-}
-
-.navbar{
-  background-color: white;
-  grid-row: 1 / span 2;
-  margin: 25px;
-}
-
-.model{
-  background-color: white;
-  padding: 10px;
-  margin: 30px;
-}
-
-.data{
-  background-color: white;
-  margin: 30px;
-}
-
-.navbar, .model, .data{
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
-  border-radius: 8px;
-}
-
-.table-scroll{
-  height: 300px;
 }
 
 </style>

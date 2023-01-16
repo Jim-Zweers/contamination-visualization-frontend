@@ -25,7 +25,11 @@ export default {
 </script>
 <style scoped>
     .container{
+        display: grid;
+        width: 100%;
+        height: 100vh;
         grid-template-rows: 1fr; 
+        grid-template-columns: 1fr 12fr;
         gap: 0px 0px; 
         grid-template-areas: 
         ". .";

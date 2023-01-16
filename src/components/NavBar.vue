@@ -19,7 +19,7 @@
                 <span>Account</span>
             </div>
             <div class="nav-box logout">
-                <router-link class="nav-item" to=""><vue-feather class="icon" type="log-out" size="35px"></vue-feather></router-link>
+                <router-link class="nav-item" to="/logout"><vue-feather class="icon" type="log-out" size="35px"></vue-feather></router-link>
                 <span>Logout</span>
             </div>
         </nav>
@@ -36,9 +36,16 @@
         color: #fff;
         display: block;
         position:absolute;
-        background-color: green;
-        border-radius: 0px 5px 5px 0px;
+        background-color: #475841;
+        border-radius: 0px 20px 20px 0px;
         padding: 10px;
+        z-index: 5;
+        transform: translateX(100%);
+        transition: transform .2s;
+    }
+
+    .nav-item:hover{
+        color: #78BC61;
     }
 
     .nav-box{
@@ -48,10 +55,10 @@
 
     span{
         position: absolute;
-        left: 100%;
         top: 0;
-        width: 100%;
-        transition: width 2s
+        right: 0;
+        width: 100px;
+        transition: transform 2s linear;
     }
 
     nav{
@@ -69,11 +76,6 @@
 
     .nav-box{
         margin-top: 30px;
-    }
-
-    .logout{
-        position: absolute;
-        bottom: 50px;
     }
 
 </style>
