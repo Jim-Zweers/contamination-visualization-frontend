@@ -9,12 +9,12 @@
                             </th>
                         </tr>
                     </thead>
-                </table>
-        <div class="table-scroll">
-                <table class="body-table">
+                <!-- </table> -->
+        <!-- <div class="table-scroll"> -->
+                <!-- <table class="body-table"> -->
                     <tbody>
-                        <tr class="item-row" v-for="item in state.items" :key="item.dataKey" for="osm">
-                            <td><input ref="input" type="checkbox" name="osm" value="{{item.id}}"></td>
+                        <tr class="item-row" v-for="item in state.items" :ref="setItemRef" :key="item.dataKey">
+                            <td><input :ref="setInput" type="checkbox" :value="item.ID" v-model="checked" /></td>
                             <td>{{item.LocationName}}</td>
                             <td>{{item.SwabName}}</td>
                             <td>{{item.Contamination}}</td>
@@ -24,39 +24,75 @@
                         </tr>
                     </tbody>
                 </table>      
-        </div>
+                <div>{{checked}}</div>
+        <!-- </div> -->
     </div>
 </template>
 <script>
 
-    import { ref, reactive, onMounted} from 'vue';
+    import { ref, reactive, onMounted, onUpdated, onBeforeUpdate} from 'vue';
     import axios from 'axios';
     import { useContaminationStore } from '@/pinia/ContaminationStore.js';
 
  export default{
 
     setup(){
-        const input = ref([]);
-        const ContaminationStore = useContaminationStore();
-        const ALL = "http://159.223.225.249:3000/api/contamination/all";
-        
+        const contaminationStore = useContaminationStore();
+        const ALL = "http://159.223.225.249:3000/api/contamination/latest";
+        const checked = ref([]);
         const state = reactive({
             items: [],
-            inputs: [],
         });
+
+        let itemRefs = []
+        const setItemRef = el =>{
+            if (el) {
+                itemRefs.push(el);
+            }
+        }
+
+        let input = []
+        const setInput = el =>{
+            if (el){
+                input.push(el);
+            }
+        }
+
+        onBeforeUpdate(() => {
+            itemRefs = []
+            input = []
+        }),
+        
+        onUpdated(() => {
+            for(let i = 0; i < itemRefs.length; i++){
+                itemRefs[i].children;
+            }
+
+            // console.log(checked.value.length);
+
+            for(let i = 0; i < checked.value.length; i++){
+                contaminationStore.updateId(checked.value[i]);
+                // console.log(checked.value.length);
+
+            }         
+
+        })
 
         const getAllContaminations = () => {
             axios.get(ALL).then((response ) => {
                 state.items = response.data.data;
-                ContaminationStore.update(state.items.ID);
+                
+                for( let i = 0; i < state.items.length; i++){
+                    // contaminationStore.update(state.items[i].ID);
+                }
+
+                
+                
                 
             });
         }
 
         onMounted(() => {
-            
-            state.inputs = input.value;
-            console.log(state.inputs);
            
         })
 
@@ -78,6 +114,9 @@
             headers,
             state,
             input,
+            setItemRef,
+            setInput,
+            checked,
         }
 
     }
@@ -105,16 +144,20 @@
         overflow: hidden;
         color: #fff;
     }
-
+/* 
     .body-table{
         border-collapse: collapse;
-    }
+    } */
 
     td{
         padding: 10px;
         border-bottom: .5px solid rgba(0, 0, 0, .1);
     }
 
+    tbody{
+        color: #000;
+    }
+    
     th{
         padding: 10px;
         background-color: #78BC61;
