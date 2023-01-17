@@ -37,7 +37,7 @@
 
     setup(){
         const contaminationStore = useContaminationStore();
-        const ALL = "http://159.223.225.249:3000/api/contamination/latest";
+        const ALL = "http://159.223.225.249:3000/api/contamination/all";
         const checked = ref([]);
         const state = reactive({
             items: [],

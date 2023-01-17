@@ -5,7 +5,7 @@
         </div>
 
         <div class="data">
-            <TableWidgetVue></TableWidgetVue>
+            <DataWidgetVue></DataWidgetVue>
         </div>
         
     </div>
@@ -13,12 +13,12 @@
 <script>
 
 import NavBarVue from '@/components/NavBar.vue';
-import TableWidgetVue from '@/components/TableWidget.vue';
+import DataWidgetVue from '@/components/DataWidget.vue';
 
 export default {
     components:{
         NavBarVue,
-        TableWidgetVue,
+        DataWidgetVue,
  },
     
 }
