@@ -27,9 +27,24 @@
         </div>
 
         <div class="button-container">
-            <button class="import_button">Select data set</button>
-            <button class="export_button">Import data set</button>
+            <button ref="color" class="import_button">Select data set</button>
+            <button ref="import" class="export_button">Import data set</button>
         </div>
+
+        <div ref="upload-box">
+            <div>
+                <label for=""></label>
+                <input type="file" ref="file">
+                <button ref="submit">Submit</button>
+            </div>
+        </div>
+            <div>
+                <button v-for="sets in contaminationStore.availableSets" :value="sets.Value" ref="selectedOption" :key="sets.setsKey">{{sets.Value}}</button>
+                <label for="datasets">Select Dataset:</label>
+                <button ref="selectButton">Submit</button>
+            </div>
+            <div ref="values" v-for="value in contaminationStore.activeId" :key="value.Id">{{value.id}}</div>
+
     </div>
     
 </template>
@@ -37,9 +52,11 @@
 <script>
     import * as THREE from 'three';
     import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-    // import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-    import { onMounted, ref } from '@vue/runtime-core';
+    import { onMounted, ref, onUpdated, onBeforeUpdate } from '@vue/runtime-core';
     import { OrbitControls }  from 'three/examples/jsm/controls/OrbitControls';
+    import { useContaminationStore } from '@/pinia/ContaminationStore.js';
+    import qs from 'qs';
+
     import axios from 'axios';
 
     
@@ -51,9 +68,65 @@
             const helpIcon = ref(null);
             const helpText = ref(null);
             const closeHelp = ref(null);
-            const ALL = "http://159.223.225.249:3000/api/contamination/all";
+            const file = ref(null);
+            const submit = ref(null);
+            const selectButton = ref(null);
+            const color = ref(null);
+            
+            const ALL = "http://159.223.225.249:3000/api/contamination/latest";
+            const UPLOAD = "http://159.223.225.249:3000/api/contamination/upload/spreadsheet"
+            const AVAILABLESETS = "http://159.223.225.249:3000/api/contamination/available/sets"
+            const contaminationStore = useContaminationStore();
+            let values = ref([]);
+            const selectedOption = ref([]);
+
+
+            
+            onUpdated(() => {
+                // console.log(values.value);
+                // for(let i = 0; i < selectedOption.value.length; i++){
+                //     console.log(selectedOption.value[i]);
+                // }
+
+                // const getOption = () =>{
+                    
+
+                // }
+                
+
+                
+     
+            }),
+
+            onBeforeUpdate(() => {
+                
+            }),
 
             onMounted(() =>{
+
+
+
+                // selectedOption.value.addEventListener('click', () => {
+                //     console.log('hallo');
+                // });
+                
+                // console.log(selectedOption.value);
+                
+                
+                // console.log(getSelected());
+
+
+                // selectedOption.value.addEventListener('click', () =>{
+                //     console.log(selectedOption.value);
+                // })
+
+                // selectButton.value.addEventListener('click', getOption());
+
+                // console.log(selectButton.value);
+
+                
+
+                // console.log(contaminationStore.availableSets);
 
                 helpIcon.value.onclick = () =>{
                     helpText.value.style.display = "block";
@@ -67,17 +140,17 @@
                     helpIcon.value.style.display = "block";
                 }
 
+                
+
                 const renderer = new THREE.WebGLRenderer();
-                // console.log(modelRender.value);
                 modelRender.value.appendChild( renderer.domElement);
-                renderer.setSize( modelRender.value.clientWidth, modelRender.value.clientHeight);    
+                renderer.setSize( modelRender.value.clientWidth, modelRender.value.clientHeight);
 
                 const scene = new THREE.Scene();
-                // const light = new THREE.AmbientLight(0x404040, 2);
-                const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const camera = new THREE.PerspectiveCamera( 75, modelRender.value.clientWidth / modelRender.value.clientHeight, 0.1, 1000);
                 const loader = new GLTFLoader();
-                const raycaster = new THREE.Raycaster();
-                const pointer = new THREE.Vector3();
+                // const raycaster = new THREE.Raycaster();
+                
                 const controls = new OrbitControls(camera, renderer.domElement);
                 let root;
                 renderer.setAnimationLoop(animate);
@@ -85,26 +158,116 @@
                 controls.update();
                 const light1 = new THREE.PointLight( 0xffffff, 1.5, 100 );
                 light1.position.set( 5, 10, 0 );
+                
 
                 loader.load(MODEL, (gltf) =>{root = gltf.scene; scene.add(root)});
 
                 const getAllContaminations = () => {
                     axios.get(ALL).then((response ) => {
                     let data = response.data.data;
+                    // console.log(data);
                         for(let i = 0; data.length > i; i++){
-                            placeSpheres(data[i].XCoördinates, data[i].YCoördinates, data[i].ZCoördinates);
+                            placeSpheres(data[i].XCoördinates, data[i].YCoördinates, data[i].ZCoördinates, data[i].ID);
                         }
                     });
                 }
 
-                getAllContaminations();
+                const getSelected = () => {
+                        for(let i = 0; i < selectedOption.value.length; i++){
+                        selectedOption.value[i].addEventListener('click', () => {
+                            return console.log(selectedOption.value[i].innerHTML);
+                        })
+                    }
+                }
+
+                getSelected();
+
+                let getSet = () =>{
+                    const url = "http://159.223.225.249:3000/api/contamination/set"
+
+                    // const searchParams = new URLSearchParams();
+
+                    // const date = { date : '2023-01-16' }
+
+                    // console.log(qs.stringify(date));
+
+                    // searchParams.append('date', '2023-01-16')
+
+                    var data = qs.stringify({
+                    'date': '2023-01-16' 
+                    });
+                    var config = {
+                    method: 'post',
+                    url: url,
+                    data : data,
+                    headers: { 
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    
+                    };
+
+                    console.log(config.data);
+
+                    axios(config)
+                    .then((response) => {
+                        console.log(response);
+                        console.log(JSON.stringify(response.data));
+
+                    }).catch((error) => {
+                        console.log(error)
+                    })
+                }
+
+                selectButton.value.addEventListener('click', getSet);
+                
+                const postContaminationData = () => {
+
+                    let formData = new FormData();
+                    formData.append('spreadsheet', file.value.files[0]);
+                    formData.append('company_name', 'Test');
+                    formData.append('mesh_name', 'Test mesh');
+                    
+                    axios.post(UPLOAD, formData,{ 
+                        
+                    })
+                    .then(function(response){
+                        console.log(response);
+
+                    })
+                    .catch(function(error){
+                        console.log(error);
+                    })
+
+                    console.log(file.value.files[0])
+                }
 
                 
-                const placeSpheres = (x,y,z) => {
-                    const geometry = new THREE.SphereGeometry(1,1,1);
+
+                submit.value.addEventListener('click', postContaminationData);
+
+
+
+                const getAvailableSet = () => {
+                    axios.get(AVAILABLESETS).then((response) => {
+                        let data = response.data.data;
+                        // console.log(data);
+                        contaminationStore.updateDataSet(data);
+                    })
+                }
+
+                
+                getAvailableSet();
+                getAllContaminations();
+
+                // const pointer = new THREE.Vector3();
+
+                
+                const placeSpheres = (x,y,z,id) => {
+                    const geometry = new THREE.SphereGeometry(.2,.2,.2);
                     const material = new THREE.MeshBasicMaterial({color: 0xffff00});
                     const sphere = new THREE.Mesh( geometry, material);
                     sphere.position.set(x, y, z);
+                    sphere.name = id;
                     scene.add(sphere);
                 }
                 
@@ -113,7 +276,6 @@
                     controls.update();
                     renderer.render( scene, camera );
                     renderer.setClearColor( 0xffffff );
-                    
                 }
                 
                 const sphereSize = 1;
@@ -122,43 +284,64 @@
                 scene.add( pointLightHelper1);
 
 
-                function onPointerMove( event ) {
-                    pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-                    pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-                    pointer.z = 0;
-                    pointer.unproject(camera);
-                    console.log(pointer);
+                // function onPointerMove( event ) {
+                //     pointer.x = ( event.clientX / modelRender.value.clientWidth ) * 2 - 1;
+                //     pointer.y = - ( event.clientY / modelRender.value.clientHeight ) * 2 + 1;
 
-                    // placeSpheres(pointer.x,pointer.y,pointer.z);
-                    raycaster.setFromCamera(pointer, camera);
+                //     raycaster.setFromCamera(pointer, camera);
 
-                    const intersects = raycaster.intersectObjects( scene.children );
-                    for (let i = 0; i < intersects.length; i++ ) {
-                        intersects[i].object.material.color.set(0xff0000);
-                        console.log(intersects[i]);
+                //     for(let i = 0; i < scene.children.length; i++){
+                //     // console.log(scene.children[i]);
+
+                //     scene.children[i].name = "point"
+                // }
+
+                    // console.log(scene.children);
+                    // const intersects = raycaster.intersectObjects( scene.children);
+                    // console.log(intersects);
+                    // for (let i = 0; i < intersects.length; i++ ) {
+                    //     intersects[i].object.material.color.set(0xff0000);
+                    //     // console.log(intersects[i]);
+                    // }
+ 
+                // }
+                const sphereValues = scene.children;
+                    const setGi = () =>{
+                        for(let i = 0; i < contaminationStore.activeId.length; i++){
+                                    
+                                    // if(sphereValues[i].name === contaminationStore.activeId[i]){
+                                         
+                                    // }
+                                    sphereValues[i].material.color.setHex( 0xffffff );
+                                    }
                     }
 
-                    console.log(intersects);
-
-                }
-
                 scene.add(light1);
-
-                animate();
-                console.log(window);
-                window.addEventListener( 'click', onPointerMove );
+                // onPointerMove 
+                // console.log(window);
+                color.value.addEventListener( 'click', setGi);
+                
 
                 camera.position.z = 5;
-
+                window.requestAnimationFrame(animate);
                 
-                } );
+                return{
+                    postContaminationData,
+                }
+                });
 
             return {
                 modelRender,
                 helpIcon,
                 helpText,
                 closeHelp,
-
+                file,
+                submit,
+                contaminationStore,
+                values,
+                selectButton,
+                selectedOption,
+                color,
             }
         }   
     }
