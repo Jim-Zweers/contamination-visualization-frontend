@@ -30,7 +30,7 @@ export default {
 
     .plan__grid{
         margin: 20px;
-        display: grid; 
+        display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr; 
         grid-template-rows: 1fr 1fr 1fr 1fr; 
         gap: 0px 0px;
