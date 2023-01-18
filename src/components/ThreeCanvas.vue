@@ -32,20 +32,27 @@
         </div>
 
             <div ref="uploadBox" class="upload-selected">
+                <div ref="uploadClose"><vue-feather class="close-upload" size="25px" type="x"></vue-feather></div>
+                
                 <input id="file-upload" @change="changeFile()" type="file" ref="file">
                 <label for="file-upload" class="fileLabel">
                     <i>Upload File</i>
                 </label>
                 <span id="insertFilename" ref="filename">Selected file: </span>
                     
-                <button ref="submit">Submit</button>
+                <button ref="submit" type="submit">Submit</button>
+                
             </div>
 
 
         <div ref="datasetBox" class="dataset-selected">
-            <button v-for="sets in contaminationStore.availableSets" :value="sets.Value" ref="selectedOption" :key="sets.setsKey">{{sets.Value}}</button>
+            <div ref="datasetClose"><vue-feather class="close-upload" size="25px" type="x"></vue-feather></div>
             <label for="datasets">Select Dataset:</label>
-            <button ref="selectButton">Submit</button>
+            <select name="" id="" multiple size="6" v-model="selected">
+                <option v-for="sets in contaminationStore.availableSets" :value="sets.Value" ref="selectedOption" :key="sets.setsKey">{{sets.Value}}</option>
+            </select>
+            
+            <button class="dataset-button" ref="selectButton">Submit</button>
         </div>
 
         <div ref="values" v-for="value in contaminationStore.activeId" :key="value.Id">{{value.id}}</div>
@@ -81,6 +88,8 @@
             const upload = ref(null);
             const select = ref(null);
             const filename = ref(null);
+            const uploadClose = ref(null);
+            const datasetClose = ref(null);
             
             const ALL = "http://159.223.225.249:3000/api/contamination/latest";
             const UPLOAD = "http://159.223.225.249:3000/api/contamination/upload/spreadsheet"
@@ -147,18 +156,28 @@
                 }
 
                 select.value.onclick = () => {
-                    datasetBox.value.style.display = "block";
-                    
+                    datasetBox.value.style.display = "flex";
                 }
 
+                uploadClose.value.onclick = () =>{
+                    uploadBox.value.style.display = "none";
+                    datasetBox.value.style.display = "none";
 
+                }
 
-                file.onclick = () =>{
-                    console.log(file.value.files.length);
+                datasetClose.value.onclick = () =>{
+                    datasetBox.value.style.display = "none";
                 }
                 
+
+                upload.value.onclick = () => {
+                    uploadBox.value.style.display = "flex";
+                }
+
+ 
                 
-                // uploadBox.value.style.display = "none";
+                
+                // 
                 // datasetBox.value.style.display = "none";
 
                 
@@ -253,13 +272,13 @@
                     })
                     .then(function(response){
                         console.log(response);
-
+                        alert('file has been uploaded');
                     })
                     .catch(function(error){
                         console.log(error);
                     })
 
-                    // window.location.reload();
+
                 }
 
                 
@@ -356,6 +375,8 @@
                     console.log(file.value.files[0]);
                 }
 
+
+
             return {
                 modelRender,
                 helpIcon,
@@ -373,6 +394,8 @@
                 upload,
                 filename,
                 changeFile,
+                uploadClose,
+                datasetClose,
             }
         }   
     }
@@ -388,8 +411,8 @@
 
     .help-icon{
         position: absolute;
-        right: 50px;
-        top: 50px;
+        right: 2%;
+        top: 2%;
         z-index: 3;
         background-color: #fff;
         border-radius: 50px;
@@ -411,7 +434,7 @@
         height: 200px;
         background-color: #fff;
         font-size: 0.8rem;
-        right: 40px;
+        right: 1%;
         display: none;
     }
     
@@ -434,8 +457,8 @@
 
     .close-help{
         position: absolute;
-        right: 50px;
-        top: 50px;
+        right: 2%;
+        top: 2%;
         z-index: 3;
         display: none;
     }
@@ -481,21 +504,47 @@
 
     .dataset-selected{
         position:absolute;
+        display: none;
+        flex-direction: column;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 200px;
+        padding: 20px;
+
+    }
+
+    .dataset-button{
+        background-color: #78BC61;
+        padding: 10px;
+        border: none;
+        margin-top: 10px;
+        color: #fff
     }
 
     .upload-selected{
         background-color: #fff;
         padding: 20px;
         width: 200px;
-        height: 150px;
-        display: flex;
+        height: 200px;
+        display: none;
         position: absolute;
         flex-direction: column;
         justify-content: space-between;
-        
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        border-radius: 10px;
+    }
+
+    .close-upload{
+        color: red;
+        display:flex;
+        justify-content: flex-end;
     }
 
     .fileLabel{
@@ -511,9 +560,11 @@
     .upload-selected > button{
         padding: 10px;
         background-color: #78BC61;
+        border: none;
     }
 
     input[type="file"]{
         display: none;
     }
+
 </style>

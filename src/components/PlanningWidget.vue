@@ -15,7 +15,7 @@
                 </div>
             </div>
         </section>
-        <section class="render-container">
+        <section ref="renderDisplay" class="render-container">
             <div class="render" ref="modelRender">
                 <div class="button-container">
                     <button class="point-button" ref="pointButton">Add Point</button>
@@ -39,11 +39,13 @@ export default {
         const planCard = ref(null);
         const modelRender = ref(null);
         const pointButton = ref(null);
+        const renderDisplay = ref(null);
         const MODEL = "./models/marckamer.glb";
 
 
         onMounted(() => {
             console.log(planCard.value);
+
             const renderer = new THREE.WebGLRenderer();
             modelRender.value.appendChild( renderer.domElement);
             renderer.setSize( modelRender.value.clientWidth, modelRender.value.clientHeight);    
@@ -51,8 +53,6 @@ export default {
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000);
             const loader = new GLTFLoader();
-            // const raycaster = new THREE.Raycaster();
-            // const pointer = new THREE.Vector3();
             const controls = new OrbitControls(camera, renderer.domElement);
             const control = new TransformControls(camera, renderer.domElement);
             control.addEventListener('change', animate);
@@ -106,9 +106,9 @@ export default {
         });
 
         return{
-            planCard,
             modelRender,
             pointButton,
+            renderDisplay,
         }
     }
 }
@@ -221,20 +221,33 @@ export default {
         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
     }
     
-    .point-button, .save-button{
+    .point-button{
        background-color: #78BC61;
        color: white;
        border: none;
-       padding: 10px 5px 5px 10px;
+       padding: 10px;
+       width: 100px;
+       border-radius: 10px;
+    }
+
+    .save-button{
+        background-color: #A06E85;
+       color: white;
+       border: none;
+       padding: 10px;
+       width: 100px;
+       border-radius: 10px;
     }
 
     .button-container{
         position: absolute;
-        width: 150px;
+        width: 250px;
         display: flex;
         justify-content: space-between;
         bottom: 20px;
         right: 20px;
     }
+
+
 
 </style>
