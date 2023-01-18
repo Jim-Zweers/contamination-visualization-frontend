@@ -27,23 +27,28 @@
         </div>
 
         <div class="button-container">
-            <button ref="color" class="import_button">Select data set</button>
-            <button ref="import" class="export_button">Import data set</button>
+            <button ref="select" class="import_button">Select data set</button>
+            <button ref="upload" class="export_button">Upload data set</button>
         </div>
 
-        <div ref="upload-box">
-            <div>
-                <label for=""></label>
-                <input type="file" ref="file">
+            <div ref="uploadBox" class="upload-selected">
+                <input id="file-upload" @change="changeFile()" type="file" ref="file">
+                <label for="file-upload" class="fileLabel">
+                    <i>Upload File</i>
+                </label>
+                <span id="insertFilename" ref="filename">Selected file: </span>
+                    
                 <button ref="submit">Submit</button>
             </div>
+
+
+        <div ref="datasetBox" class="dataset-selected">
+            <button v-for="sets in contaminationStore.availableSets" :value="sets.Value" ref="selectedOption" :key="sets.setsKey">{{sets.Value}}</button>
+            <label for="datasets">Select Dataset:</label>
+            <button ref="selectButton">Submit</button>
         </div>
-            <div>
-                <button v-for="sets in contaminationStore.availableSets" :value="sets.Value" ref="selectedOption" :key="sets.setsKey">{{sets.Value}}</button>
-                <label for="datasets">Select Dataset:</label>
-                <button ref="selectButton">Submit</button>
-            </div>
-            <div ref="values" v-for="value in contaminationStore.activeId" :key="value.Id">{{value.id}}</div>
+
+        <div ref="values" v-for="value in contaminationStore.activeId" :key="value.Id">{{value.id}}</div>
 
     </div>
     
@@ -52,7 +57,7 @@
 <script>
     import * as THREE from 'three';
     import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-    import { onMounted, ref, onUpdated, onBeforeUpdate } from '@vue/runtime-core';
+    import { onMounted, ref, onUpdated } from '@vue/runtime-core';
     import { OrbitControls }  from 'three/examples/jsm/controls/OrbitControls';
     import { useContaminationStore } from '@/pinia/ContaminationStore.js';
     import qs from 'qs';
@@ -71,7 +76,11 @@
             const file = ref(null);
             const submit = ref(null);
             const selectButton = ref(null);
-            const color = ref(null);
+            const uploadBox = ref(null);
+            const datasetBox = ref(null);
+            const upload = ref(null);
+            const select = ref(null);
+            const filename = ref(null);
             
             const ALL = "http://159.223.225.249:3000/api/contamination/latest";
             const UPLOAD = "http://159.223.225.249:3000/api/contamination/upload/spreadsheet"
@@ -92,14 +101,11 @@
                     
 
                 // }
+
                 
 
                 
      
-            }),
-
-            onBeforeUpdate(() => {
-                
             }),
 
             onMounted(() =>{
@@ -139,6 +145,21 @@
                     closeHelp.value.style.display = "none";
                     helpIcon.value.style.display = "block";
                 }
+
+                select.value.onclick = () => {
+                    datasetBox.value.style.display = "block";
+                    
+                }
+
+
+
+                file.onclick = () =>{
+                    console.log(file.value.files.length);
+                }
+                
+                
+                // uploadBox.value.style.display = "none";
+                // datasetBox.value.style.display = "none";
 
                 
 
@@ -238,7 +259,7 @@
                         console.log(error);
                     })
 
-                    console.log(file.value.files[0])
+                    // window.location.reload();
                 }
 
                 
@@ -305,21 +326,21 @@
                     // }
  
                 // }
-                const sphereValues = scene.children;
-                    const setGi = () =>{
-                        for(let i = 0; i < contaminationStore.activeId.length; i++){
+                // const sphereValues = scene.children;
+                //     const setGi = () =>{
+                //         for(let i = 0; i < contaminationStore.activeId.length; i++){
                                     
-                                    // if(sphereValues[i].name === contaminationStore.activeId[i]){
+                //                     // if(sphereValues[i].name === contaminationStore.activeId[i]){
                                          
-                                    // }
-                                    sphereValues[i].material.color.setHex( 0xffffff );
-                                    }
-                    }
+                //                     // }
+                //                     sphereValues[i].material.color.setHex( 0xffffff );
+                //                     }
+                //     }
 
                 scene.add(light1);
                 // onPointerMove 
                 // console.log(window);
-                color.value.addEventListener( 'click', setGi);
+                // color.value.addEventListener( 'click', setGi);
                 
 
                 camera.position.z = 5;
@@ -329,6 +350,11 @@
                     postContaminationData,
                 }
                 });
+
+                const changeFile = () => {
+                    filename.value.innerHTML += file.value.files[0].name;
+                    console.log(file.value.files[0]);
+                }
 
             return {
                 modelRender,
@@ -341,7 +367,12 @@
                 values,
                 selectButton,
                 selectedOption,
-                color,
+                uploadBox,
+                datasetBox,
+                select,
+                upload,
+                filename,
+                changeFile,
             }
         }   
     }
@@ -352,6 +383,7 @@
     .render{
         width: 100%;
         height: 100%;
+        position: relative;
     }
 
     .help-icon{
@@ -415,8 +447,8 @@
     .button-container{
         display: flex;
         position: absolute;
-        right: 3%;
-        bottom: 45%;
+        right: 2%;
+        bottom: 2%;
         width: 280px;
         justify-content: space-between;
     }
@@ -445,5 +477,43 @@
     .export_button:hover{
         background-color: #684756;
         cursor: pointer;
+    }
+
+    .dataset-selected{
+        position:absolute;
+    }
+
+    .upload-selected{
+        background-color: #fff;
+        padding: 20px;
+        width: 200px;
+        height: 150px;
+        display: flex;
+        position: absolute;
+        flex-direction: column;
+        justify-content: space-between;
+        
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .fileLabel{
+        background-color: #78BC61;
+        padding: 10px;
+    }
+
+    .upload{
+        height: 300px;
+        background-color: #fff;
+    }
+
+    .upload-selected > button{
+        padding: 10px;
+        background-color: #78BC61;
+    }
+
+    input[type="file"]{
+        display: none;
     }
 </style>
